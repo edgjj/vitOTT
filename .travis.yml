@@ -1,5 +1,20 @@
-language: c++
+language: cpp
 os: osx
 osx_image: xcode12.5
-xcode_project: Builds\MacOSX\vitOTT.xcodeproj
-xcode_scheme: vitOTT
+
+before_install:
+- if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
+
+script:
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cd "./Builds/MacOSX"; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then xcodebuild -project vitOTT.xcodeproj -alltargets -configuration Release build; fi
+- cd ./../..
+
+after_success:
+- export VERSION=$(git describe --tags)
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then export DEPLOYFILE=sfizz-$VERSION.dmg; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then mkdir ./output; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cp -r ./Builds/MacOSX/build/Release/* ./output/; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cp ./resources/icons/icon.icns ./output/sfizz.app/Contents/Resources/; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then hdiutil create /tmp/tmp.dmg -ov -volname "sfizz-$VERSION" -fs HFS+ -srcfolder "./output/"; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then hdiutil convert /tmp/tmp.dmg -format UDZO -o ./$DEPLOYFILE; fi
