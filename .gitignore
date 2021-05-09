@@ -1,0 +1,6 @@
+Builds/VisualStudio2019/x64
+Builds/VisualStudio2019/.vs
+!*.cpp
+!*.hpp
+!*.c
+!*.h
