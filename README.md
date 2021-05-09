@@ -1,4 +1,6 @@
 # vitOTT
+[![Build Status](https://api.travis-ci.org/edgjj/vitOTT.svg?branch=master)](https://api.travis-ci.org/edgjj/vitOTT.svg?branch=master)
+
 Multiband compressor from Vital synthesizer.
 
 ## Requirements
