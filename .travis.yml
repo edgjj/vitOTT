@@ -9,7 +9,7 @@ before_install:
 
 script:
 - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cd "./Builds/MacOSX"; fi
-- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then xcodebuild -project vitOTT.xcodeproj -alltargets -configuration Release build; fi
+- if [ "$TRAVIS_OS_NAME" == "osx"   ]; then xcodebuild -project vitOTT.xcodeproj ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration Release build; fi
 - cd ./../..
 
 after_success:
