@@ -8,7 +8,7 @@ before_install:
 script:
 - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cd "./Builds/MacOSX"; fi
 - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then xcodebuild -project vitOTT.xcodeproj ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO -configuration Release build; fi
-- cd ./../.. 
+- cd ./../..
 
 after_success:
 - export VERSION=$(git describe --tags)
