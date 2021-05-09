@@ -1,5 +1,5 @@
 /* Copyright 2013-2019 Matt Tytel
- *
+ *           2021 Yegor Suslin
  * vital is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -189,6 +189,10 @@ namespace vital {
     band_high_compressor_.useInput(input(kAttack), Compressor::kAttack);
     band_high_compressor_.useInput(input(kRelease), Compressor::kRelease);
     band_high_compressor_.useInput(input(kMix), Compressor::kMix);
+
+    low_band_filter_.useInput(input(kLMFrequency), LinkwitzRileyFilter::kFrequency);
+    band_high_filter_.useInput(input(kMHFrequency), LinkwitzRileyFilter::kFrequency);
+
   }
 
   void MultibandCompressor::setOversampleAmount(int oversample) {

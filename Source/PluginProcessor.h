@@ -101,7 +101,7 @@ private:
     std::unique_ptr<vital::MultibandCompressor> comp;
     std::unique_ptr<vital::Output> sig_in;
 
-    std::array <vital::Value*, 19> vals = {};
+    std::array <vital::Value*, 21> vals = {};
 
     double in_gain = 1.0f, out_gain = 1.0f;
 

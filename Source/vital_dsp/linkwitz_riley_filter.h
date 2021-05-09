@@ -25,6 +25,7 @@ namespace vital {
     public:
       enum {
         kAudio,
+        kFrequency,
         kNumInputs
       };
 
@@ -41,7 +42,7 @@ namespace vital {
       virtual void process(int num_samples) override;
       void processWithInput(const poly_float* audio_in, int num_samples) override;
 
-      void computeCoefficients();
+      void computeCoefficients(const poly_float* freq);
       void setSampleRate(int sample_rate) override;
       void setOversampleAmount(int oversample_amount) override;
 

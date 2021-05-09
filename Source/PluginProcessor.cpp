@@ -103,8 +103,12 @@ void VitOttAudioProcessor::updParams()
         hgain = parameters.getRawParameterValue("hgain")->load(),
         att_time = parameters.getRawParameterValue("att_time")->load(),
         rel_time = parameters.getRawParameterValue("rel_time")->load(),
-        mix = parameters.getRawParameterValue("mix")->load();
+        mix = parameters.getRawParameterValue("mix")->load(),
+        lband_freq = parameters.getRawParameterValue("low_cross_freq")->load(),
+        hband_freq = parameters.getRawParameterValue("high_cross_freq")->load();
 
+    if (lband_freq > hband_freq)
+        lband_freq = hband_freq;
     
     vals[vital::MultibandCompressor::kLowLowerRatio - 1]->set(comp_basic_vals::kLowLowerRatio * depth * downward);
     vals[vital::MultibandCompressor::kLowUpperRatio - 1]->set(comp_basic_vals::kLowUpperRatio * depth * upward);
@@ -122,6 +126,9 @@ void VitOttAudioProcessor::updParams()
     vals[vital::MultibandCompressor::kLowOutputGain - 1]->set(lgain);
     vals[vital::MultibandCompressor::kBandOutputGain - 1]->set(mgain);
     vals[vital::MultibandCompressor::kHighOutputGain - 1]->set(hgain);
+
+    vals[vital::MultibandCompressor::kLMFrequency - 1]->set(lband_freq);
+    vals[vital::MultibandCompressor::kMHFrequency - 1]->set(hband_freq);
 
     vals[vital::MultibandCompressor::kMix - 1]->set(mix);
 }

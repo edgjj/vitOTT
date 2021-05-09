@@ -96,6 +96,8 @@ namespace vital {
         kRelease,
         kEnabledBands,
         kMix,
+        kLMFrequency,
+        kMHFrequency,
         kNumInputs
       };
 
@@ -145,6 +147,9 @@ namespace vital {
       cr::Output band_high_upper_threshold_;
       cr::Output low_band_lower_threshold_;
       cr::Output band_high_lower_threshold_;
+
+      cr::Output low_band_frequency_;
+      cr::Output band_high_frequency_;
 
       cr::Output low_band_output_gain_;
       cr::Output band_high_output_gain_;

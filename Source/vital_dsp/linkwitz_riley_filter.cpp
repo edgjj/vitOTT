@@ -27,10 +27,12 @@ namespace vital {
   }
 
   void LinkwitzRileyFilter::process(int num_samples) {
+    
     processWithInput(input(kAudio)->source->buffer, num_samples);
   }
 
   void LinkwitzRileyFilter::processWithInput(const poly_float* audio_in, int num_samples) {
+    computeCoefficients(input(kFrequency)->source->buffer);
     poly_float* dest_low = output(kAudioLow)->buffer;
     for (int i = 0; i < num_samples; ++i) {
       poly_float audio = audio_in[i];
@@ -92,7 +94,8 @@ namespace vital {
     }
   }
 
-  void LinkwitzRileyFilter::computeCoefficients() {
+  void LinkwitzRileyFilter::computeCoefficients(const poly_float* freq) {
+    cutoff_ = freq->access(0);
     mono_float warp = 1.0f / tanf(kPi * cutoff_ / getSampleRate());
     mono_float warp2 = warp * warp;
     mono_float mult = 1.0f / (1.0f + kSqrt2 * warp + warp2);
@@ -112,11 +115,9 @@ namespace vital {
 
   void LinkwitzRileyFilter::setSampleRate(int sample_rate) {
     Processor::setSampleRate(sample_rate);
-    computeCoefficients();
   }
 
   void LinkwitzRileyFilter::setOversampleAmount(int oversample_amount) {
       Processor::setOversampleAmount(oversample_amount);
-      computeCoefficients();
   }
 } // namespace vital
