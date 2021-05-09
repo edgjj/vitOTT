@@ -1,4 +1,5 @@
 language: c++
+os:osx
 osx_image: xcode12.5
 xcode_project: Builds\MacOSX\vitOTT.xcodeproj
 xcode_scheme: vitOTT
