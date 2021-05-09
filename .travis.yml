@@ -5,7 +5,7 @@ osx_image: xcode12.5
 before_install:
 - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update; fi
 - wget -c -nv "https://github.com/juce-framework/JUCE/releases/download/6.0.8/juce-6.0.8-$TRAVIS_OS_NAME.zip"
-- unzip ./juce-6.0.8-$TRAVIS_OS_NAME.zip -d $(SRCROOT)/~/
+- unzip ./juce-6.0.8-$TRAVIS_OS_NAME.zip -d "./Builds/MacOSX"
 
 script:
 - if [ "$TRAVIS_OS_NAME" == "osx"   ]; then cd "./Builds/MacOSX"; fi
