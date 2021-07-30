@@ -21,28 +21,6 @@
 #include "vital_dsp/compressor.h"
 #include "vital_dsp/framework/value.h"
 
-
-namespace comp_basic_vals
-{
-    constexpr float kLowLowerThreshold = -35.0;
-    constexpr float kLowUpperThreshold = -28.0;
-    constexpr float kLowLowerRatio = 0.8;
-    constexpr float kLowUpperRatio = 0.9;
-
-    constexpr float kBandLowerThreshold = -36.0;
-    constexpr float kBandUpperThreshold = -25.0;
-    constexpr float kBandLowerRatio = 0.8;
-    constexpr float kBandUpperRatio = 0.857;
-
-    constexpr float kHighLowerThreshold = -35.0;
-    constexpr float kHighUpperThreshold = -30.0;
-    constexpr float kHighLowerRatio = 0.8;
-    constexpr float kHighUpperRatio = 1.0;
-
-    constexpr uint8_t kEnabledBands = vital::MultibandCompressor::kMultiband;
-
-}
-
 //==============================================================================
 /**
 */
@@ -89,8 +67,6 @@ public:
     void writeAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void readAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
 
-
-    void setStaticParams();
     void initVals();
     void updParams();
 

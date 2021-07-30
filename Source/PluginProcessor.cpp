@@ -41,6 +41,18 @@ VitOttAudioProcessor::VitOttAudioProcessor()
             std::make_unique<juce::AudioParameterFloat>("hgain", "High. Gain", -40, 40, 16.3f),
             std::make_unique<juce::AudioParameterFloat>("low_cross_freq", "Low/Mid Freq", 20.f, 18000.f, 120.f),
             std::make_unique<juce::AudioParameterFloat>("high_cross_freq", "Mid/High Freq", 20.f, 18000.f, 2500.f),
+            std::make_unique<juce::AudioParameterFloat>("low_lower_thres", "Low (Lower) Threshold", -80, 0, -35.0),
+            std::make_unique<juce::AudioParameterFloat>("low_upper_thres", "Low (Upper) Threshold", -80, 0, -28.0),
+            std::make_unique<juce::AudioParameterFloat>("low_lower_ratio", "Low (Lower) Ratio", 0, 1.0, 0.8),
+            std::make_unique<juce::AudioParameterFloat>("low_upper_ratio", "Low (Upper) Ratio", 0, 1.0, 0.9),
+            std::make_unique<juce::AudioParameterFloat>("band_lower_thres", "Mid (Lower) Threshold", -80, 0, -36.0),
+            std::make_unique<juce::AudioParameterFloat>("band_upper_thres", "Mid (Upper) Threshold", -80, 0, -25.0),
+            std::make_unique<juce::AudioParameterFloat>("band_lower_ratio", "Mid (Lower) Ratio", 0, 1.0, 0.8),
+            std::make_unique<juce::AudioParameterFloat>("band_upper_ratio", "Mid (Upper) Ratio", 0, 1.0, 0.857),
+            std::make_unique<juce::AudioParameterFloat>("high_lower_thres", "High (Lower) Threshold", -80, 0, -35.0),
+            std::make_unique<juce::AudioParameterFloat>("high_upper_thres", "High (Upper) Threshold", -80, 0, -30.0),
+            std::make_unique<juce::AudioParameterFloat>("high_lower_ratio", "High (Lower) Ratio", 0, 1.0, 0.8),
+            std::make_unique<juce::AudioParameterFloat>("high_upper_ratio", "High (Upper) Ratio", 0, 1.0, 1.0),
                            })
 #endif
 {
@@ -70,23 +82,9 @@ void VitOttAudioProcessor::initVals()
     {
         vals[i] = new vital::SmoothValue(0);
     }
-    setStaticParams();
+    vals[vital::MultibandCompressor::kEnabledBands - 1]->set(vital::MultibandCompressor::kMultiband);
     updParams();
     
-}
-
-void VitOttAudioProcessor::setStaticParams()
-{
-    vals[vital::MultibandCompressor::kLowLowerThreshold - 1]->set(comp_basic_vals::kLowLowerThreshold);
-    vals[vital::MultibandCompressor::kLowUpperThreshold - 1]->set(comp_basic_vals::kLowUpperThreshold);
-
-    vals[vital::MultibandCompressor::kBandLowerThreshold - 1]->set(comp_basic_vals::kBandLowerThreshold);
-    vals[vital::MultibandCompressor::kBandUpperThreshold - 1]->set(comp_basic_vals::kBandUpperThreshold);
-
-    vals[vital::MultibandCompressor::kHighLowerThreshold - 1]->set(comp_basic_vals::kHighLowerThreshold);
-    vals[vital::MultibandCompressor::kHighUpperThreshold - 1]->set(comp_basic_vals::kHighUpperThreshold);
-
-    vals[vital::MultibandCompressor::kEnabledBands - 1]->set(vital::MultibandCompressor::kMultiband);
 }
 
 void VitOttAudioProcessor::updParams()
@@ -95,7 +93,7 @@ void VitOttAudioProcessor::updParams()
     in_gain = parameters.getRawParameterValue("in_gain")->load();
     out_gain = parameters.getRawParameterValue("out_gain")->load();
 
-    double  depth = parameters.getRawParameterValue("depth")->load(),
+    double depth = parameters.getRawParameterValue("depth")->load(),
         upward = parameters.getRawParameterValue("upward")->load(),
         downward = parameters.getRawParameterValue("downward")->load(),
         lgain = parameters.getRawParameterValue("lgain")->load(),
@@ -105,20 +103,40 @@ void VitOttAudioProcessor::updParams()
         rel_time = parameters.getRawParameterValue("rel_time")->load(),
         mix = parameters.getRawParameterValue("mix")->load(),
         lband_freq = parameters.getRawParameterValue("low_cross_freq")->load(),
-        hband_freq = parameters.getRawParameterValue("high_cross_freq")->load();
+        hband_freq = parameters.getRawParameterValue("high_cross_freq")->load(),
+        ll_thres = parameters.getRawParameterValue("low_lower_thres")->load(),
+        lu_thres = parameters.getRawParameterValue("low_upper_thres")->load(),
+        ll_ratio = parameters.getRawParameterValue("low_lower_ratio")->load(),
+        lu_ratio = parameters.getRawParameterValue("low_upper_ratio")->load(),
+        bl_thres = parameters.getRawParameterValue("band_lower_thres")->load(),
+        bu_thres = parameters.getRawParameterValue("band_upper_thres")->load(),
+        bl_ratio = parameters.getRawParameterValue("band_lower_ratio")->load(),
+        bu_ratio = parameters.getRawParameterValue("band_upper_ratio")->load(),
+        hl_thres = parameters.getRawParameterValue("high_lower_thres")->load(),
+        hu_thres = parameters.getRawParameterValue("high_upper_thres")->load(),
+        hl_ratio = parameters.getRawParameterValue("high_lower_ratio")->load(),
+        hu_ratio = parameters.getRawParameterValue("high_upper_ratio")->load();
 
     if (lband_freq > hband_freq)
         lband_freq = hband_freq;
     
-    vals[vital::MultibandCompressor::kLowLowerRatio - 1]->set(comp_basic_vals::kLowLowerRatio * depth * downward);
-    vals[vital::MultibandCompressor::kLowUpperRatio - 1]->set(comp_basic_vals::kLowUpperRatio * depth * upward);
+    vals[vital::MultibandCompressor::kLowLowerThreshold - 1]->set(ll_thres);
+    vals[vital::MultibandCompressor::kLowUpperThreshold - 1]->set(lu_thres);
 
-    vals[vital::MultibandCompressor::kBandLowerRatio - 1]->set(comp_basic_vals::kBandLowerRatio * depth * downward);
-    vals[vital::MultibandCompressor::kBandUpperRatio - 1]->set(comp_basic_vals::kBandUpperRatio * depth * upward);
+    vals[vital::MultibandCompressor::kBandLowerThreshold - 1]->set(bl_thres);
+    vals[vital::MultibandCompressor::kBandUpperThreshold - 1]->set(bu_thres);
 
-    vals[vital::MultibandCompressor::kHighLowerRatio - 1]->set(comp_basic_vals::kHighLowerRatio * depth * downward);
-    vals[vital::MultibandCompressor::kHighUpperRatio - 1]->set(comp_basic_vals::kHighUpperRatio * depth * upward);
+    vals[vital::MultibandCompressor::kHighLowerThreshold - 1]->set(hl_thres);
+    vals[vital::MultibandCompressor::kHighUpperThreshold - 1]->set(hu_thres);
+    
+    vals[vital::MultibandCompressor::kLowLowerRatio - 1]->set(ll_ratio * depth * upward);
+    vals[vital::MultibandCompressor::kLowUpperRatio - 1]->set(lu_ratio * depth * downward);
 
+    vals[vital::MultibandCompressor::kBandLowerRatio - 1]->set(bl_ratio * depth * upward);
+    vals[vital::MultibandCompressor::kBandUpperRatio - 1]->set(bu_ratio * depth * downward);
+
+    vals[vital::MultibandCompressor::kHighLowerRatio - 1]->set(hl_ratio * depth * upward);
+    vals[vital::MultibandCompressor::kHighUpperRatio - 1]->set(hu_ratio * depth * downward);
 
     vals[vital::MultibandCompressor::kAttack - 1]->set(att_time);
     vals[vital::MultibandCompressor::kRelease - 1]->set(rel_time);
@@ -324,6 +342,7 @@ void VitOttAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 
     auto state = parameters.copyState();
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
+    xml->setAttribute("pversion", ProjectInfo::versionNumber);
     copyXmlToBinary(*xml, destData);
 }
 
@@ -333,10 +352,30 @@ void VitOttAudioProcessor::setStateInformation (const void* data, int sizeInByte
     // whose contents will have been created by the getStateInformation() call.
 
     std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+    
 
-    if (xmlState.get() != nullptr)
+    if (xmlState)
         if (xmlState->hasTagName(parameters.state.getType()))
-            parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+        {
+            if (!xmlState->hasAttribute("pversion") || xmlState->getIntAttribute("pversion") != ProjectInfo::versionNumber)
+            {
+                auto state = parameters.copyState();
+                std::unique_ptr<juce::XmlElement> xml(state.createXml());
+                for (auto* e : xmlState->getChildIterator())
+                {
+                    if (auto c = xml->getChildByAttribute("id", e->getStringAttribute("id")))
+                    {
+                        c->setAttribute("value", e->getDoubleAttribute("value"));
+                    }
+                }
+                parameters.replaceState(juce::ValueTree::fromXml(*xml));
+            }
+            else
+            {
+                parameters.replaceState(juce::ValueTree::fromXml(*xmlState));
+            }
+        }
+    
 }
 
 //==============================================================================
