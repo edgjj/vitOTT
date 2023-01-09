@@ -8,7 +8,7 @@ jobs:
       matrix:
         os: [ubuntu-18.04, windows-latest, macos-11]
 
-    name: Build plugin & do packages
+    name: Build plugin & upload artifacts
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -35,3 +35,21 @@ jobs:
               mkdir build && cd build
               cmake -DCMAKE_CXX_FLAGS="/Ox /fp:fast" ..
               cmake --build . --config Release
+      
+      - uses: actions/upload-artifact@v3
+        if: startsWith(matrix.os, 'ubuntu')
+        with: 
+          name: vitOTT-linux-x86_64-lv2_vst3
+          path: build/vitOTT_artefacts/
+
+      - uses: actions/upload-artifact@v3
+        if: startsWith(matrix.os, 'macos')
+        with: 
+          name: vitOTT-osx-x86_64-au_vst3
+          path: build/vitOTT_artefacts/
+
+      - uses: actions/upload-artifact@v3
+        if: startsWith(matrix.os, 'windows')
+        with: 
+          name: vitOTT-windows-x86_64-vst3
+          path: build/vitOTT_artefacts/Release/
