@@ -1,6 +1,12 @@
-Builds/VisualStudio2019/x64
-Builds/VisualStudio2019/.vs
+doc/
+builds/
+build/
+build-wsl/
+cmake-build-debug/
+cmake-build-release/
+!CMakeLists.txt
 !*.cpp
 !*.hpp
 !*.c
 !*.h
+!Doxyfile
