@@ -16,26 +16,50 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies
+      - name: Install dependencies (Linux)
         if: startsWith(matrix.os, 'ubuntu')
         run: |
               sudo apt-get update 
               sudo apt-get install -y libasound2-dev libgtk-3-dev libxcb1-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev
       
-      - name: Run CMake
+      - name: Run CMake (OSX/Linux)
         if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
         run: |
               mkdir build && cd build
               cmake -DCMAKE_CXX_FLAGS="-ffast-math -O3" ..
               cmake --build . --config Release
             
-      - name: Run CMake
+      - name: Run CMake (Windows)
         if: startsWith(matrix.os, 'windows')
         run: |
               mkdir build && cd build
               cmake -DCMAKE_CXX_FLAGS="/Ox /fp:fast" ..
               cmake --build . --config Release
       
+      - name: Validate plugin (Windows)
+        if: startsWith(matrix.os, 'windows')
+        run: |
+              powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; Invoke-WebRequest https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_Windows.zip -OutFile pluginval.zip"
+              powershell -Command "Expand-Archive pluginval.zip -DestinationPath ."
+              pluginval.exe --validate-in-process --skip-gui-tests --strictness-level 5 "build/vitOTT_artefacts/Release/VST3/vitOTT.vst3"
+              if %ERRORLEVEL% neq 0 exit /b 1 
+        shell: cmd
+
+      - name: Validate plugin (OSX)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+              curl -L "https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_macOS.zip" -o pluginval.zip
+              unzip pluginval
+              pluginval.app/Contents/MacOS/pluginval --skip-gui-tests --validate-in-process --strictness-level 5 "build/vitOTT_artefacts/VST3/vitOTT.vst3" || exit 1
+              pluginval.app/Contents/MacOS/pluginval --skip-gui-tests --validate-in-process --strictness-level 5 "build/vitOTT_artefacts/AU/vitOTT.component" || exit 1
+
+      - name: Validate plugin (Linux)
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+              curl -L "https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_Linux.zip" -o pluginval.zip
+              unzip pluginval
+              ./pluginval --validate-in-process --skip-gui-tests --strictness-level 5 "build/vitOTT_artefacts/VST3/vitOTT.vst3" || exit 1
+
       - uses: actions/upload-artifact@v3
         if: startsWith(matrix.os, 'ubuntu')
         with: 
