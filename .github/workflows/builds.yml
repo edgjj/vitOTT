@@ -10,9 +10,11 @@ jobs:
 
     name: Build plugin & do packages
     runs-on: ${{ matrix.os }}
-    
+
     steps:
       - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
       - name: Install dependencies
         if: startsWith(matrix.os, 'ubuntu')
