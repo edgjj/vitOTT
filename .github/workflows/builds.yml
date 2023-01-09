@@ -50,8 +50,9 @@ jobs:
         run: |
               curl -L "https://github.com/Tracktion/pluginval/releases/latest/download/pluginval_macOS.zip" -o pluginval.zip
               unzip pluginval
+              killall -9 AudioComponentRegistrar
               pluginval.app/Contents/MacOS/pluginval --skip-gui-tests --validate-in-process --strictness-level 5 "build/vitOTT_artefacts/VST3/vitOTT.vst3" || exit 1
-              pluginval.app/Contents/MacOS/pluginval --skip-gui-tests --validate-in-process --strictness-level 5 "build/vitOTT_artefacts/AU/vitOTT.component" || exit 1
+              pluginval.app/Contents/MacOS/pluginval --skip-gui-tests --validate-in-process --strictness-level 5 build/vitOTT_artefacts/AU/vitOTT.component || exit 1
 
       - name: Validate plugin (Linux)
         if: startsWith(matrix.os, 'ubuntu')
