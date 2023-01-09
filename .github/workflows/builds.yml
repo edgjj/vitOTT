@@ -21,16 +21,9 @@ jobs:
         run: |
               sudo apt-get update 
               sudo apt-get install -y libasound2-dev libgtk-3-dev libxcb1-dev libcurl4-openssl-dev libwebkit2gtk-4.0-dev
-
-      - name: Run CMake
-        if: startsWith(matrix.os, 'macos')
-        run: |
-              mkdir build && cd build
-              cmake -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" -DCMAKE_CXX_FLAGS="-ffast-math -O3" -G Xcode ..
-              cmake --build . --config Release
       
       - name: Run CMake
-        if: startsWith(matrix.os, 'ubuntu')
+        if: startsWith(matrix.os, 'ubuntu') || startsWith(matrix.os, 'macos')
         run: |
               mkdir build && cd build
               cmake -DCMAKE_CXX_FLAGS="-ffast-math -O3" ..
