@@ -9,7 +9,8 @@ jobs:
         os: [ubuntu-18.04, windows-latest, macos-11]
 
     name: Build plugin & do packages
-
+    runs-on: ${{ matrix.os }}
+    
     steps:
       - uses: actions/checkout@v3
 
