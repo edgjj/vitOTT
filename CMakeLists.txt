@@ -56,8 +56,12 @@ target_sources(vitOTT PRIVATE
 
 target_compile_definitions(vitOTT
     PUBLIC 
+    JUCE_REPORT_APP_USAGE=0
+    JUCE_WEB_BROWSER=0
     JUCE_VST3_CAN_REPLACE_VST2=0
-	JUCE_DISPLAY_SPLASH_SCREEN=0
+    JUCE_DISPLAY_SPLASH_SCREEN=0
+    JUCE_JACK=1
+    JUCE_ALSA=1
 )
 
 target_link_libraries(vitOTT
