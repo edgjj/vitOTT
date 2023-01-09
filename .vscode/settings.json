@@ -1,0 +1,7 @@
+{
+    "editor.formatOnSave": true,
+    "files.associations": {
+        "*._py": "python",
+        "memory": "cpp"
+    }
+}

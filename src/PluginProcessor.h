@@ -1,4 +1,4 @@
-/* Copyright 2021 Yegor Suslin
+/* Copyright 2023 Yegor Suslin
  *
  * vitOTT is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,30 +16,29 @@
 
 #pragma once
 
-#include <JuceHeader.h>
-#include <array>
 #include "vital_dsp/compressor.h"
 #include "vital_dsp/framework/value.h"
+#include <JuceHeader.h>
+#include <array>
 
 //==============================================================================
 /**
-*/
-class VitOttAudioProcessor  : public juce::AudioProcessor
-{
+ */
+class VitOttAudioProcessor : public juce::AudioProcessor {
 public:
     //==============================================================================
     VitOttAudioProcessor();
     ~VitOttAudioProcessor() override;
 
     //==============================================================================
-    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
+    void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
 
-   #ifndef JucePlugin_PreferredChannelConfigurations
-    bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
-   #endif
+#ifndef JucePlugin_PreferredChannelConfigurations
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
+#endif
 
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+    void processBlock(juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -56,13 +55,13 @@ public:
     //==============================================================================
     int getNumPrograms() override;
     int getCurrentProgram() override;
-    void setCurrentProgram (int index) override;
-    const juce::String getProgramName (int index) override;
-    void changeProgramName (int index, const juce::String& newName) override;
+    void setCurrentProgram(int index) override;
+    const juce::String getProgramName(int index) override;
+    void changeProgramName(int index, const juce::String& newName) override;
 
     //==============================================================================
-    void getStateInformation (juce::MemoryBlock& destData) override;
-    void setStateInformation (const void* data, int sizeInBytes) override;
+    void getStateInformation(juce::MemoryBlock& destData) override;
+    void setStateInformation(const void* data, int sizeInBytes) override;
 
     void writeAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
     void readAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset);
@@ -77,9 +76,9 @@ private:
     std::unique_ptr<vital::MultibandCompressor> comp;
     std::unique_ptr<vital::Output> sig_in;
 
-    std::array <vital::Value*, 21> vals = {};
+    std::array<vital::Value*, 21> vals = {};
 
     double in_gain = 1.0f, out_gain = 1.0f;
 
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VitOttAudioProcessor)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VitOttAudioProcessor)
 };
