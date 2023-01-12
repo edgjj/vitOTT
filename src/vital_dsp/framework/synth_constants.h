@@ -67,36 +67,6 @@ namespace vital {
       kNumSourceDestinations
     };
 
-    static SourceDestination toggleFilter1(SourceDestination current_destination, bool on) {
-      if (on) {
-        if (current_destination == vital::constants::kFilter2)
-          return vital::constants::kDualFilters;
-        else
-          return vital::constants::kFilter1;
-      }
-      else if (current_destination == vital::constants::kDualFilters)
-        return vital::constants::kFilter2;
-      else if (current_destination == vital::constants::kFilter1)
-        return vital::constants::kEffects;
-
-      return current_destination;
-    }
-
-    static SourceDestination toggleFilter2(SourceDestination current_destination, bool on) {
-      if (on) {
-        if (current_destination == vital::constants::kFilter1)
-          return vital::constants::kDualFilters;
-        else
-          return vital::constants::kFilter2;
-      }
-      else if (current_destination == vital::constants::kDualFilters)
-        return vital::constants::kFilter1;
-      else if (current_destination == vital::constants::kFilter2)
-        return vital::constants::kEffects;
-
-      return current_destination;
-    }
-
     enum Effect {
       kChorus,
       kCompressor,

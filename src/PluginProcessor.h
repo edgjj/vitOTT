@@ -18,13 +18,15 @@
 
 #include "vital_dsp/compressor.h"
 #include "vital_dsp/framework/value.h"
+#include "synth_base.h"
+
 #include <JuceHeader.h>
 #include <array>
 
 //==============================================================================
 /**
  */
-class VitOttAudioProcessor : public juce::AudioProcessor {
+class VitOttAudioProcessor : public juce::AudioProcessor, public SynthBase {
 public:
     //==============================================================================
     VitOttAudioProcessor();
@@ -73,8 +75,8 @@ private:
     //==============================================================================
 
     juce::AudioProcessorValueTreeState parameters;
-    std::unique_ptr<vital::MultibandCompressor> comp;
-    std::unique_ptr<vital::Output> sig_in;
+    std::unique_ptr<vital::MultibandCompressor> compressor;
+    std::unique_ptr<vital::Output> signal_in;
 
     std::array<vital::Value*, 21> vals = {};
 

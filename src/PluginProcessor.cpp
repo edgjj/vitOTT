@@ -15,17 +15,15 @@
  */
 
 #include "PluginProcessor.h"
+#include "PluginEditor.h"
+
 #include "vital_dsp/utilities/smooth_value.h"
 //==============================================================================
 VitOttAudioProcessor::VitOttAudioProcessor()
-#ifndef JucePlugin_PreferredChannelConfigurations
     : AudioProcessor(BusesProperties()
-#if !JucePlugin_IsMidiEffect
-#if !JucePlugin_IsSynth
                          .withInput("Input", juce::AudioChannelSet::stereo(), true)
-#endif
                          .withOutput("Output", juce::AudioChannelSet::stereo(), true)
-#endif
+
             )
     , parameters(*this, nullptr, juce::Identifier("vitOTT"),
           {
@@ -54,16 +52,24 @@ VitOttAudioProcessor::VitOttAudioProcessor()
               std::make_unique<juce::AudioParameterFloat>("high_lower_ratio", "High (Lower) Ratio", 0, 1.0, 0.8),
               std::make_unique<juce::AudioParameterFloat>("high_upper_ratio", "High (Upper) Ratio", 0, 1.0, 1.0),
           })
-#endif
+    , SynthBase(this)
 {
-    comp = std::make_unique<vital::MultibandCompressor>();
-    sig_in = std::make_unique<vital::Output>();
-    comp->plug(sig_in.get(), vital::MultibandCompressor::kAudio);
+    compressor = std::make_unique<vital::MultibandCompressor>();
+    signal_in = std::make_unique<vital::Output>();
+    compressor->plug(signal_in.get(), vital::MultibandCompressor::kAudio);
 
     initVals();
     for (int i = 0; i < vals.size(); i++) {
-        comp->plug(vals[i], i + 1);
+        compressor->plug(vals[i], i + 1);
     }
+
+    // create status outputs
+    createStatusOutput("compressor_low_input", compressor->output(vital::MultibandCompressor::kLowInputMeanSquared));
+    createStatusOutput("compressor_band_input", compressor->output(vital::MultibandCompressor::kBandInputMeanSquared));
+    createStatusOutput("compressor_high_input", compressor->output(vital::MultibandCompressor::kHighInputMeanSquared));
+    createStatusOutput("compressor_low_output", compressor->output(vital::MultibandCompressor::kLowOutputMeanSquared));
+    createStatusOutput("compressor_band_output", compressor->output(vital::MultibandCompressor::kBandOutputMeanSquared));
+    createStatusOutput("compressor_high_output", compressor->output(vital::MultibandCompressor::kHighOutputMeanSquared));
 }
 
 VitOttAudioProcessor::~VitOttAudioProcessor()
@@ -84,7 +90,6 @@ void VitOttAudioProcessor::initVals()
 
 void VitOttAudioProcessor::updParams()
 {
-
     in_gain = parameters.getRawParameterValue("in_gain")->load();
     out_gain = parameters.getRawParameterValue("out_gain")->load();
 
@@ -210,8 +215,8 @@ void VitOttAudioProcessor::changeProgramName(int index, const juce::String& newN
 //==============================================================================
 void VitOttAudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
-    comp->reset(vital::constants::kFullMask);
-    comp->setSampleRate(sampleRate);
+    compressor->reset(vital::constants::kFullMask);
+    compressor->setSampleRate(sampleRate);
     // Use this method as the place to do any pre-playback
     // initialisation that you need..
 }
@@ -269,18 +274,17 @@ void VitOttAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
         for (auto& i : vals)
             i->process(num_samples);
 
-        readAudio(sig_in->buffer, &buffer, totalNumInputChannels, num_samples, sample_offset);
+        readAudio(signal_in->buffer, &buffer, totalNumInputChannels, num_samples, sample_offset);
 
-        comp->process(num_samples);
+        compressor->process(num_samples);
 
-        writeAudio(comp->output(vital::MultibandCompressor::kAudioOut)->buffer, &buffer, totalNumOutputChannels, num_samples, sample_offset);
+        writeAudio(compressor->output(vital::MultibandCompressor::kAudioOut)->buffer, &buffer, totalNumOutputChannels, num_samples, sample_offset);
 
         sample_offset += num_samples;
     }
 }
 void VitOttAudioProcessor::readAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset)
 {
-
     vital::mono_float* comp_output = (vital::mono_float*)comp_buf;
     double mag = vital::utils::dbToMagnitude(in_gain);
     for (int channel = 0; channel < channels; ++channel) {
@@ -311,12 +315,12 @@ void VitOttAudioProcessor::writeAudio(vital::poly_float* comp_buf, juce::AudioSa
 //==============================================================================
 bool VitOttAudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+    return true; // (change this to false if you choose to not supply an editor)
 }
 
 juce::AudioProcessorEditor* VitOttAudioProcessor::createEditor()
 {
-    return nullptr;
+    return new VitOttAudioProcessorEditor(*this);
 }
 
 //==============================================================================
