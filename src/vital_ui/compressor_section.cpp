@@ -38,6 +38,14 @@ CompressorSection::CompressorSection(const String& name)
     addSlider(mix_.get());
     mix_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
 
+    lm_freq_ = std::make_unique<SynthSlider>("compressor_low_cross_freq");
+    addSlider(lm_freq_.get());
+    lm_freq_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
+    mh_freq_ = std::make_unique<SynthSlider>("compressor_high_cross_freq");
+    addSlider(mh_freq_.get());
+    mh_freq_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
+
     attack_ = std::make_unique<SynthSlider>("compressor_attack");
     addSlider(attack_.get());
     attack_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -57,12 +65,6 @@ CompressorSection::CompressorSection(const String& name)
     high_gain_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     high_gain_->setBipolar(true);
 
-    enabled_bands_ = std::make_unique<TextSelector>("compressor_enabled_bands");
-    addSlider(enabled_bands_.get());
-    enabled_bands_->setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
-    enabled_bands_->setLookAndFeel(TextLookAndFeel::instance());
-    enabled_bands_->setLongStringLookup(strings::kCompressorBandNames);
-
     compressor_editor_ = std::make_unique<CompressorEditor>();
     addAndMakeVisible(compressor_editor_.get());
     addOpenGlComponent(compressor_editor_.get());
@@ -81,13 +83,13 @@ void CompressorSection::paintBackground(Graphics& g)
     SynthSection::paintBackground(g);
     setLabelFont(g);
 
-    drawTextComponentBackground(g, enabled_bands_->getBounds(), true);
-    drawLabelForComponent(g, TRANS("MODE"), enabled_bands_.get(), true);
     drawLabelForComponent(g, TRANS("ATTACK"), attack_.get());
     drawLabelForComponent(g, TRANS("RELEASE"), release_.get());
     drawLabelForComponent(g, TRANS("MIX"), mix_.get());
+    drawLabelForComponent(g, TRANS("LM FREQ"), lm_freq_.get());
+    drawLabelForComponent(g, TRANS("MH FREQ"), mh_freq_.get());
     drawLabelForComponent(g, TRANS("LOW"), low_gain_.get());
-    drawLabelForComponent(g, TRANS("BAND"), band_gain_.get());
+    drawLabelForComponent(g, TRANS("MID"), band_gain_.get());
     drawLabelForComponent(g, TRANS("HIGH"), high_gain_.get());
 }
 
@@ -106,13 +108,11 @@ void CompressorSection::resized()
     int editor_width = time_area.getX() - editor_x - widget_margin;
     int knob_y2 = section_height - widget_margin;
 
-    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), knob_y2, knobs_area.getWidth(), section_height),
-        { low_gain_.get(), band_gain_.get(), high_gain_.get() });
+    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), 0, knobs_area.getWidth(), section_height),
+        {   mix_.get(), lm_freq_.get(), mh_freq_.get() });
 
-    int bands_width = band_gain_->getRight() - low_gain_->getX();
-    enabled_bands_->setBounds(settings_area.getX(), widget_margin, bands_width, section_height - 2 * widget_margin);
-    int mix_x = enabled_bands_->getRight();
-    placeKnobsInArea(Rectangle<int>(mix_x, 0, knobs_area.getRight() - mix_x, section_height), { mix_.get() });
+    placeKnobsInArea(Rectangle<int>(knobs_area.getX(), knob_y2, knobs_area.getWidth(), section_height),
+        {   low_gain_.get(), band_gain_.get(), high_gain_.get() });
 
     attack_->setBounds(time_area.getX(), 0, time_area.getWidth(), section_height - widget_margin);
     release_->setBounds(time_area.getX(), knob_y2, time_area.getWidth(), section_height - widget_margin);
@@ -138,14 +138,12 @@ void CompressorSection::setActive(bool active)
 
 void CompressorSection::sliderValueChanged(Slider* changed_slider)
 {
-    if (changed_slider == enabled_bands_.get())
-        setCompressorActiveBands();
     SynthSection::sliderValueChanged(changed_slider);
 }
 
 void CompressorSection::setCompressorActiveBands()
 {
-    int enabled_bands = enabled_bands_->getValue();
+    int enabled_bands = vital::MultibandCompressor::kMultiband; // ott go brr
     bool low_enabled = enabled_bands == vital::MultibandCompressor::kLowBand || enabled_bands == vital::MultibandCompressor::kMultiband;
     bool high_enabled = enabled_bands == vital::MultibandCompressor::kHighBand || enabled_bands == vital::MultibandCompressor::kMultiband;
     compressor_editor_->setLowBandActive(low_enabled);

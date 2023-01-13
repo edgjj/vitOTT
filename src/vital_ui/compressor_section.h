@@ -46,7 +46,9 @@ class CompressorSection : public SynthSection {
     std::unique_ptr<SynthSlider> low_gain_;
     std::unique_ptr<SynthSlider> band_gain_;
     std::unique_ptr<SynthSlider> high_gain_;
-    std::unique_ptr<TextSelector> enabled_bands_;
+    std::unique_ptr<SynthSlider> lm_freq_;
+    std::unique_ptr<SynthSlider> mh_freq_;
+
     std::unique_ptr<CompressorEditor> compressor_editor_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(CompressorSection)
