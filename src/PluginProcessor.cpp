@@ -72,7 +72,7 @@ VitOttAudioProcessor::VitOttAudioProcessor()
     createStatusOutput("compressor_band_output", compressor->output(vital::MultibandCompressor::kBandOutputMeanSquared));
     createStatusOutput("compressor_high_output", compressor->output(vital::MultibandCompressor::kHighOutputMeanSquared));
 
-    createControlMap();
+    updateControls();
 }
 
 VitOttAudioProcessor::~VitOttAudioProcessor()
@@ -93,6 +93,8 @@ void VitOttAudioProcessor::initVals()
 
 void VitOttAudioProcessor::updParams()
 {
+    updateControls();
+
     in_gain = parameters.getRawParameterValue("compressor_in_gain")->load();
     out_gain = parameters.getRawParameterValue("compressor_out_gain")->load();
 

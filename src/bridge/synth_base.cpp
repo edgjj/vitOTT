@@ -65,10 +65,17 @@ vital::control_map& SynthBase::getControls()
     return _controls;
 }
 
-void SynthBase::createControlMap()
+void SynthBase::updateControls()
 {
-    for (const auto& v : _parent_vts.state) { 
-        _controls[v.getProperty("id").toString().toStdString()] = new vital::Value((double)v.getProperty("value"));
+    if (_controls.empty()) {
+        for (const auto& v : _parent_vts.state) {
+            _controls[v.getProperty("id").toString().toStdString()] = new vital::Value((double)v.getProperty("value"));
+        }
+    }
+    else {
+        for (const auto& v : _parent_vts.state) {
+            _controls[v.getProperty("id").toString().toStdString()]->set((double)v.getProperty("value"));
+        }
     }
 }
 

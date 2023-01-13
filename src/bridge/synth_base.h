@@ -42,7 +42,7 @@ public:
     vital::control_map& getControls();
 
 protected:
-    void createControlMap();
+    void updateControls();
     void createStatusOutput(std::string name, vital::Output* source);
     void updateStatusOutputs();
 
