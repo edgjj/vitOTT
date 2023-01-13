@@ -1,5 +1,6 @@
 // clang-format off
 #include "synth_gui_interface.h"
+#include "synth_base.h"
 // clang-format on
 
 // hold section component
@@ -14,6 +15,8 @@ SynthGuiInterface::SynthGuiInterface(SynthBase& base, SynthSection* section)
     */
     _gui = std::make_unique<FullInterface>(section);
     addAndMakeVisible(*_gui);
+
+    _gui->setAllValues(base.getControls());
 }
 
 SynthBase* SynthGuiInterface::getSynth()

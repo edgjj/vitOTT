@@ -25,7 +25,8 @@
 class SynthBase {
 public:
 
-    SynthBase(juce::AudioProcessor* parent);
+    SynthBase(juce::AudioProcessor* parent, juce::AudioProcessorValueTreeState& vts);
+    ~SynthBase();
 
     void beginChangeGesture(const std::string& s);
     void endChangeGesture(const std::string& s);
@@ -38,15 +39,21 @@ public:
     juce::CriticalSection& getCriticalSection();
 
     void valueChangedInternal(const std::string& name, double value);
+    vital::control_map& getControls();
 
 protected:
+    void createControlMap();
     void createStatusOutput(std::string name, vital::Output* source);
+    void updateStatusOutputs();
 
 private:
     std::map<std::string, std::unique_ptr<vital::StatusOutput>> _status_outputs;
     juce::CriticalSection _critical_section;
 
     juce::AudioProcessor* _parent;
+    juce::AudioProcessorValueTreeState& _parent_vts;
+
+    vital::control_map _controls;
 
     JUCE_LEAK_DETECTOR(SynthBase)
 };

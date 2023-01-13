@@ -81,6 +81,7 @@ private:
     std::array<vital::Value*, 21> vals = {};
 
     double in_gain = 1.0f, out_gain = 1.0f;
+    bool toggled_on{ true };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VitOttAudioProcessor)
 };

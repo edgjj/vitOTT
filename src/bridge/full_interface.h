@@ -18,6 +18,8 @@
 
 #include "shaders.h"
 #include "synth_section.h"
+#include "open_gl_background.h"
+
 #include <JuceHeader.h>
 
 class FullInterface : public juce::Component, public juce::OpenGLRenderer {
@@ -42,6 +44,8 @@ public:
     void renderOpenGL() override;
     void openGLContextClosing() override;
 
+    void setAllValues(vital::control_map& controls);
+
     void resized() override;
 
 private:
@@ -53,7 +57,15 @@ private:
     std::unique_ptr<Shaders> _shaders;
     OpenGlWrapper _opengl;
 
+    OpenGlBackground _background;
+
     bool _opengl_unsupported{ false };
+
+    /*
+    *   param stuff
+    */
+    /*vital::control_map _vital_control_map;
+    std::unordered_map<std::string, ValueBridge*/
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(FullInterface);
 };

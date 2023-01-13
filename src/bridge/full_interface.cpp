@@ -1,5 +1,8 @@
 // clang-format off
 #include "full_interface.h"
+#include "synth_gui_interface.h"
+#include "synth_base.h"
+
 #include "default_look_and_feel.h"
 #include "skin.h"
 // clang-format on
@@ -14,6 +17,9 @@ FullInterface::FullInterface(SynthSection* section)
     setLookAndFeel(DefaultLookAndFeel::instance());
     _section->setLookAndFeel(DefaultLookAndFeel::instance());
 
+    // required for looking up various UI-related values; check value_lookup_ && findValue
+    _section->setSkinValues(skin, true);  
+
     addAndMakeVisible(*_section);
 
     // OpenGL stuff
@@ -26,6 +32,7 @@ FullInterface::FullInterface(SynthSection* section)
 
     // animate stuff
     _section->animate(true);
+    _section->setAlwaysOnTop(true);
 }
 
 FullInterface::~FullInterface()
@@ -57,12 +64,26 @@ void FullInterface::hideDisplay(bool primary)
 
 void FullInterface::repaintChildBackground(SynthSection* child)
 {
-    JUCE_BREAK_IN_DEBUGGER
+    //if (!_background_image.isValid())
+    //    return;
+
+    //_background.lock();
+    //Graphics g(_background_image);
+    //paintChildBackground(g, child);
+    //_background.updateBackgroundImage(_background_image);
+    //_background.unlock();
 }
 
 void FullInterface::repaintOpenGlBackground(OpenGlComponent* component)
 {
-    JUCE_BREAK_IN_DEBUGGER
+    //if (!_background_image.isValid())
+    //    return;
+
+    //_background.lock();
+    //Graphics g(_background_image);
+    //paintOpenGlBackground(g, component);
+    //_background.updateBackgroundImage(_background_image);
+    //_background.unlock();
 }
 
 void FullInterface::newOpenGLContextCreated()
@@ -84,6 +105,7 @@ void FullInterface::newOpenGLContextCreated()
     _opengl.display_scale = 1.0f;
     // last_render_scale_ = display_scale_;
 
+    _background.init(_opengl);
     _section->initOpenGlComponents(_opengl);
 }
 
@@ -92,6 +114,7 @@ void FullInterface::renderOpenGL()
     if (_opengl_unsupported)
         return;
 
+    _background.render(_opengl);
     _section->renderOpenGlComponents(_opengl, true);
 }
 
@@ -100,10 +123,16 @@ void FullInterface::openGLContextClosing()
     if (_opengl_unsupported)
         return;
 
+    _background.destroy(_opengl);
     _section->destroyOpenGlComponents(_opengl);
 
     _opengl.shaders = nullptr;
     _shaders = nullptr;
+}
+
+void FullInterface::setAllValues(vital::control_map& controls)
+{
+    _section->setAllValues(controls);
 }
 
 void FullInterface::resized()

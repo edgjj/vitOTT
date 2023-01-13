@@ -1,18 +1,26 @@
 #include "synth_base.h"
 
-SynthBase::SynthBase(juce::AudioProcessor* parent)
+SynthBase::SynthBase(juce::AudioProcessor* parent, juce::AudioProcessorValueTreeState& vts)
     : _parent(parent)
+    , _parent_vts(vts)
 {
+}
+
+SynthBase::~SynthBase()
+{
+    for (auto& [k, v] : _controls) {
+        delete v;
+    }
 }
 
 void SynthBase::beginChangeGesture(const std::string& s)
 {
-    JUCE_BREAK_IN_DEBUGGER
+    _parent_vts.getParameter(s)->beginChangeGesture();
 }
 
 void SynthBase::endChangeGesture(const std::string& s)
 {
-    JUCE_BREAK_IN_DEBUGGER
+    _parent_vts.getParameter(s)->endChangeGesture();
 }
 
 const vital::StatusOutput* SynthBase::getStatusOutput(const std::string& name) const
@@ -47,10 +55,31 @@ juce::CriticalSection& SynthBase::getCriticalSection()
 
 void SynthBase::valueChangedInternal(const std::string& name, double value)
 {
-    JUCE_BREAK_IN_DEBUGGER
+    auto* param = _parent_vts.getParameter(name);
+    auto normalized = param->convertTo0to1(value);
+    param->setValueNotifyingHost(normalized);
+}
+
+vital::control_map& SynthBase::getControls()
+{
+    return _controls;
+}
+
+void SynthBase::createControlMap()
+{
+    for (auto& v : _parent_vts.state) {
+        _controls[v.getProperty("id").toString().toStdString()] = new vital::Value((double)v.getProperty("value"));
+    }
 }
 
 void SynthBase::createStatusOutput(std::string name, vital::Output* source)
 {
 	_status_outputs[std::move(name)] = std::make_unique<vital::StatusOutput>(source);
+}
+
+void SynthBase::updateStatusOutputs()
+{
+    for (auto& [k, v] : _status_outputs) {
+        v->update();
+    }
 }

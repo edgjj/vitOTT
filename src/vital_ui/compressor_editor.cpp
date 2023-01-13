@@ -534,129 +534,129 @@ void CompressorEditor::setAllValues(vital::control_map& controls) {
 }
 
 void CompressorEditor::setLowUpperThreshold(float db, bool clamp) {
-  //low_upper_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
+  low_upper_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
 
-  //if (clamp)
-  //  low_upper_threshold_ = db;
-  //synth->valueChangedInternal("compressor_low_upper_threshold", db);
-  //if (low_upper_threshold_ < low_lower_threshold_ && clamp)
-  //  setLowLowerThreshold(db, clamp);
+  if (clamp)
+    low_upper_threshold_ = db;
+  synth->valueChangedInternal("compressor_low_upper_threshold", db);
+  if (low_upper_threshold_ < low_lower_threshold_ && clamp)
+    setLowLowerThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(low_upper_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(low_upper_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setBandUpperThreshold(float db, bool clamp) {
-  //band_upper_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
-  //
-  //if (clamp)
-  //  band_upper_threshold_ = db;
-  //synth->valueChangedInternal("compressor_band_upper_threshold", db);
-  //if (band_upper_threshold_ < band_lower_threshold_ && clamp)
-  //  setBandLowerThreshold(db, clamp);
+  band_upper_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
+  
+  if (clamp)
+    band_upper_threshold_ = db;
+  synth->valueChangedInternal("compressor_band_upper_threshold", db);
+  if (band_upper_threshold_ < band_lower_threshold_ && clamp)
+    setBandLowerThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(band_upper_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(band_upper_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setHighUpperThreshold(float db, bool clamp) {
-  //high_upper_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
-  //
-  //if (clamp)
-  //  high_upper_threshold_ = db;
-  //synth->valueChangedInternal("compressor_high_upper_threshold", db);
-  //if (high_upper_threshold_ < high_lower_threshold_ && clamp)
-  //  setHighLowerThreshold(db, clamp);
+  high_upper_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
+  
+  if (clamp)
+    high_upper_threshold_ = db;
+  synth->valueChangedInternal("compressor_high_upper_threshold", db);
+  if (high_upper_threshold_ < high_lower_threshold_ && clamp)
+    setHighLowerThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(high_upper_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(high_upper_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setLowLowerThreshold(float db, bool clamp) {
-  //low_lower_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
+  low_lower_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
 
-  //if (clamp)
-  //  low_lower_threshold_ = db;
-  //synth->valueChangedInternal("compressor_low_lower_threshold", db);
-  //if (low_lower_threshold_ > low_upper_threshold_ && clamp)
-  //  setLowUpperThreshold(db, clamp);
+  if (clamp)
+    low_lower_threshold_ = db;
+  synth->valueChangedInternal("compressor_low_lower_threshold", db);
+  if (low_lower_threshold_ > low_upper_threshold_ && clamp)
+    setLowUpperThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(low_lower_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(low_lower_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setBandLowerThreshold(float db, bool clamp) {
-  //band_lower_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
+  band_lower_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
 
-  //if (clamp)
-  //  band_lower_threshold_ = db;
-  //synth->valueChangedInternal("compressor_band_lower_threshold", db);
-  //if (band_lower_threshold_ > band_upper_threshold_ && clamp)
-  //  setBandUpperThreshold(db, clamp);
+  if (clamp)
+    band_lower_threshold_ = db;
+  synth->valueChangedInternal("compressor_band_lower_threshold", db);
+  if (band_lower_threshold_ > band_upper_threshold_ && clamp)
+    setBandUpperThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(band_lower_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(band_lower_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setHighLowerThreshold(float db, bool clamp ) {
-  //high_lower_threshold_ = db;
-  //db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
-  //SynthBase* synth = parent_->getSynth();
+  high_lower_threshold_ = db;
+  db = vital::utils::clamp(db, kMinEditDb, kMaxEditDb);
+  SynthBase* synth = parent_->getSynth();
 
-  //if (clamp)
-  //  high_lower_threshold_ = db;
-  //synth->valueChangedInternal("compressor_high_lower_threshold", db);
-  //if (high_lower_threshold_ > high_upper_threshold_ && clamp)
-  //  setHighUpperThreshold(db, clamp);
+  if (clamp)
+    high_lower_threshold_ = db;
+  synth->valueChangedInternal("compressor_high_lower_threshold", db);
+  if (high_lower_threshold_ > high_upper_threshold_ && clamp)
+    setHighUpperThreshold(db, clamp);
 
-  //section_parent_->showPopupDisplay(this, formatString(high_lower_threshold_, " dB"), BubbleComponent::below, true);
+  section_parent_->showPopupDisplay(this, formatString(high_lower_threshold_, " dB"), BubbleComponent::below, true);
 }
 
 void CompressorEditor::setLowUpperRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //low_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
-  //synth->valueChangedInternal("compressor_low_upper_ratio", ratio);
+  low_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
+  synth->valueChangedInternal("compressor_low_upper_ratio", ratio);
 }
 
 void CompressorEditor::setBandUpperRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //band_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
-  //synth->valueChangedInternal("compressor_band_upper_ratio", ratio);
+  band_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
+  synth->valueChangedInternal("compressor_band_upper_ratio", ratio);
 }
 
 void CompressorEditor::setHighUpperRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //high_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
-  //synth->valueChangedInternal("compressor_high_upper_ratio", ratio);
+  high_upper_ratio_ = vital::utils::clamp(ratio, kMinUpperRatio, kMaxUpperRatio);
+  synth->valueChangedInternal("compressor_high_upper_ratio", ratio);
 }
 
 void CompressorEditor::setLowLowerRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //low_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
-  //synth->valueChangedInternal("compressor_low_lower_ratio", ratio);
+  low_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
+  synth->valueChangedInternal("compressor_low_lower_ratio", ratio);
 }
 
 void CompressorEditor::setBandLowerRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //band_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
-  //synth->valueChangedInternal("compressor_band_lower_ratio", ratio);
+  band_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
+  synth->valueChangedInternal("compressor_band_lower_ratio", ratio);
 }
 
 void CompressorEditor::setHighLowerRatio(float ratio) {
-  //SynthBase* synth = parent_->getSynth();
+  SynthBase* synth = parent_->getSynth();
 
-  //high_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
-  //synth->valueChangedInternal("compressor_high_lower_ratio", ratio);
+  high_lower_ratio_ = vital::utils::clamp(ratio, kMinLowerRatio, kMaxLowerRatio);
+  synth->valueChangedInternal("compressor_high_lower_ratio", ratio);
 }
 
 String CompressorEditor::formatValue(float value) {

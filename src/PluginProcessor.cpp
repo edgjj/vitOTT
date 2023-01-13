@@ -27,32 +27,33 @@ VitOttAudioProcessor::VitOttAudioProcessor()
             )
     , parameters(*this, nullptr, juce::Identifier("vitOTT"),
           {
-              std::make_unique<juce::AudioParameterFloat>("in_gain", "In Gain", -60.0f, 30.0f, 0.0f),
-              std::make_unique<juce::AudioParameterFloat>("out_gain", "Out Gain", -60.0f, 30.0f, 0.0f),
-              std::make_unique<juce::AudioParameterFloat>("mix", "Mix", 0, 1.f, 1.0f),
-              std::make_unique<juce::AudioParameterFloat>("upward", "Upward", 0, 2.f, 1.0f),
-              std::make_unique<juce::AudioParameterFloat>("downward", "Downward", 0, 2.f, 1.0f),
-              std::make_unique<juce::AudioParameterFloat>("att_time", "Attack", 0, 1.f, 0.5f),
-              std::make_unique<juce::AudioParameterFloat>("rel_time", "Release", 0, 1.f, 0.5f),
-              std::make_unique<juce::AudioParameterFloat>("lgain", "Low. Gain", -40, 40, 16.3f),
-              std::make_unique<juce::AudioParameterFloat>("mgain", "Mid. Gain", -40, 40, 11.7f),
-              std::make_unique<juce::AudioParameterFloat>("hgain", "High. Gain", -40, 40, 16.3f),
-              std::make_unique<juce::AudioParameterFloat>("low_cross_freq", "Low/Mid Freq", 20.f, 18000.f, 120.f),
-              std::make_unique<juce::AudioParameterFloat>("high_cross_freq", "Mid/High Freq", 20.f, 18000.f, 2500.f),
-              std::make_unique<juce::AudioParameterFloat>("low_lower_thres", "Low (Lower) Threshold", -80, 0, -35.0),
-              std::make_unique<juce::AudioParameterFloat>("low_upper_thres", "Low (Upper) Threshold", -80, 0, -28.0),
-              std::make_unique<juce::AudioParameterFloat>("low_lower_ratio", "Low (Lower) Ratio", 0, 1.0, 0.8),
-              std::make_unique<juce::AudioParameterFloat>("low_upper_ratio", "Low (Upper) Ratio", 0, 1.0, 0.9),
-              std::make_unique<juce::AudioParameterFloat>("band_lower_thres", "Mid (Lower) Threshold", -80, 0, -36.0),
-              std::make_unique<juce::AudioParameterFloat>("band_upper_thres", "Mid (Upper) Threshold", -80, 0, -25.0),
-              std::make_unique<juce::AudioParameterFloat>("band_lower_ratio", "Mid (Lower) Ratio", 0, 1.0, 0.8),
-              std::make_unique<juce::AudioParameterFloat>("band_upper_ratio", "Mid (Upper) Ratio", 0, 1.0, 0.857),
-              std::make_unique<juce::AudioParameterFloat>("high_lower_thres", "High (Lower) Threshold", -80, 0, -35.0),
-              std::make_unique<juce::AudioParameterFloat>("high_upper_thres", "High (Upper) Threshold", -80, 0, -30.0),
-              std::make_unique<juce::AudioParameterFloat>("high_lower_ratio", "High (Lower) Ratio", 0, 1.0, 0.8),
-              std::make_unique<juce::AudioParameterFloat>("high_upper_ratio", "High (Upper) Ratio", 0, 1.0, 1.0),
+              std::make_unique<juce::AudioParameterBool>("compressor_on", "Toggle On", true),
+              std::make_unique<juce::AudioParameterFloat>("compressor_in_gain", "In Gain", -60.0f, 30.0f, 0.0f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_out_gain", "Out Gain", -60.0f, 30.0f, 0.0f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_mix", "Mix", 0, 1.f, 1.0f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_upward", "Upward", 0, 2.f, 1.0f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_downward", "Downward", 0, 2.f, 1.0f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_attack", "Attack", 0, 1.f, 0.5f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_release", "Release", 0, 1.f, 0.5f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_gain", "Low. Gain", -40, 40, 16.3f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_band_gain", "Mid. Gain", -40, 40, 11.7f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_gain", "High. Gain", -40, 40, 16.3f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_cross_freq", "Low/Mid Freq", 20.f, 18000.f, 120.f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_cross_freq", "Mid/High Freq", 20.f, 18000.f, 2500.f),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_lower_threshold", "Low (Lower) Threshold", -80, 0, -35.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_upper_threshold", "Low (Upper) Threshold", -80, 0, -28.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_lower_ratio", "Low (Lower) Ratio", 0, 1.0, 0.8),
+              std::make_unique<juce::AudioParameterFloat>("compressor_low_upper_ratio", "Low (Upper) Ratio", 0, 1.0, 0.9),
+              std::make_unique<juce::AudioParameterFloat>("compressor_band_lower_threshold", "Mid (Lower) Threshold", -80, 0, -36.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_band_upper_threshold", "Mid (Upper) Threshold", -80, 0, -25.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_band_lower_ratio", "Mid (Lower) Ratio", 0, 1.0, 0.8),
+              std::make_unique<juce::AudioParameterFloat>("compressor_band_upper_ratio", "Mid (Upper) Ratio", 0, 1.0, 0.857),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_lower_threshold", "High (Lower) Threshold", -80, 0, -35.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_upper_threshold", "High (Upper) Threshold", -80, 0, -30.0),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_lower_ratio", "High (Lower) Ratio", 0, 1.0, 0.8),
+              std::make_unique<juce::AudioParameterFloat>("compressor_high_upper_ratio", "High (Upper) Ratio", 0, 1.0, 1.0),
           })
-    , SynthBase(this)
+    , SynthBase(this, parameters)
 {
     compressor = std::make_unique<vital::MultibandCompressor>();
     signal_in = std::make_unique<vital::Output>();
@@ -70,6 +71,8 @@ VitOttAudioProcessor::VitOttAudioProcessor()
     createStatusOutput("compressor_low_output", compressor->output(vital::MultibandCompressor::kLowOutputMeanSquared));
     createStatusOutput("compressor_band_output", compressor->output(vital::MultibandCompressor::kBandOutputMeanSquared));
     createStatusOutput("compressor_high_output", compressor->output(vital::MultibandCompressor::kHighOutputMeanSquared));
+
+    createControlMap();
 }
 
 VitOttAudioProcessor::~VitOttAudioProcessor()
@@ -90,31 +93,31 @@ void VitOttAudioProcessor::initVals()
 
 void VitOttAudioProcessor::updParams()
 {
-    in_gain = parameters.getRawParameterValue("in_gain")->load();
-    out_gain = parameters.getRawParameterValue("out_gain")->load();
+    in_gain = parameters.getRawParameterValue("compressor_in_gain")->load();
+    out_gain = parameters.getRawParameterValue("compressor_out_gain")->load();
 
-    double upward = parameters.getRawParameterValue("upward")->load(),
-           downward = parameters.getRawParameterValue("downward")->load(),
-           lgain = parameters.getRawParameterValue("lgain")->load(),
-           mgain = parameters.getRawParameterValue("mgain")->load(),
-           hgain = parameters.getRawParameterValue("hgain")->load(),
-           att_time = parameters.getRawParameterValue("att_time")->load(),
-           rel_time = parameters.getRawParameterValue("rel_time")->load(),
-           mix = parameters.getRawParameterValue("mix")->load(),
-           lband_freq = parameters.getRawParameterValue("low_cross_freq")->load(),
-           hband_freq = parameters.getRawParameterValue("high_cross_freq")->load(),
-           ll_thres = parameters.getRawParameterValue("low_lower_thres")->load(),
-           lu_thres = parameters.getRawParameterValue("low_upper_thres")->load(),
-           ll_ratio = parameters.getRawParameterValue("low_lower_ratio")->load(),
-           lu_ratio = parameters.getRawParameterValue("low_upper_ratio")->load(),
-           bl_thres = parameters.getRawParameterValue("band_lower_thres")->load(),
-           bu_thres = parameters.getRawParameterValue("band_upper_thres")->load(),
-           bl_ratio = parameters.getRawParameterValue("band_lower_ratio")->load(),
-           bu_ratio = parameters.getRawParameterValue("band_upper_ratio")->load(),
-           hl_thres = parameters.getRawParameterValue("high_lower_thres")->load(),
-           hu_thres = parameters.getRawParameterValue("high_upper_thres")->load(),
-           hl_ratio = parameters.getRawParameterValue("high_lower_ratio")->load(),
-           hu_ratio = parameters.getRawParameterValue("high_upper_ratio")->load();
+    double upward = parameters.getRawParameterValue("compressor_upward")->load(),
+           downward = parameters.getRawParameterValue("compressor_downward")->load(),
+           lgain = parameters.getRawParameterValue("compressor_low_gain")->load(),
+           mgain = parameters.getRawParameterValue("compressor_band_gain")->load(),
+           hgain = parameters.getRawParameterValue("compressor_high_gain")->load(),
+           att_time = parameters.getRawParameterValue("compressor_attack")->load(),
+           rel_time = parameters.getRawParameterValue("compressor_release")->load(),
+           mix = parameters.getRawParameterValue("compressor_mix")->load(),
+           lband_freq = parameters.getRawParameterValue("compressor_low_cross_freq")->load(),
+           hband_freq = parameters.getRawParameterValue("compressor_high_cross_freq")->load(),
+           ll_thres = parameters.getRawParameterValue("compressor_low_lower_threshold")->load(),
+           lu_thres = parameters.getRawParameterValue("compressor_low_upper_threshold")->load(),
+           ll_ratio = parameters.getRawParameterValue("compressor_low_lower_ratio")->load(),
+           lu_ratio = parameters.getRawParameterValue("compressor_low_upper_ratio")->load(),
+           bl_thres = parameters.getRawParameterValue("compressor_band_lower_threshold")->load(),
+           bu_thres = parameters.getRawParameterValue("compressor_band_upper_threshold")->load(),
+           bl_ratio = parameters.getRawParameterValue("compressor_band_lower_ratio")->load(),
+           bu_ratio = parameters.getRawParameterValue("compressor_band_upper_ratio")->load(),
+           hl_thres = parameters.getRawParameterValue("compressor_high_lower_threshold")->load(),
+           hu_thres = parameters.getRawParameterValue("compressor_high_upper_threshold")->load(),
+           hl_ratio = parameters.getRawParameterValue("compressor_high_lower_ratio")->load(),
+           hu_ratio = parameters.getRawParameterValue("compressor_high_upper_ratio")->load();
 
     if (lband_freq > hband_freq)
         lband_freq = hband_freq;
@@ -148,6 +151,8 @@ void VitOttAudioProcessor::updParams()
     vals[vital::MultibandCompressor::kMHFrequency - 1]->set(hband_freq);
 
     vals[vital::MultibandCompressor::kMix - 1]->set(mix);
+
+    toggled_on = parameters.getRawParameterValue("compressor_on")->load();
 }
 
 //==============================================================================
@@ -254,6 +259,12 @@ bool VitOttAudioProcessor::isBusesLayoutSupported(const BusesLayout& layouts) co
 void VitOttAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+    updParams();
+
+    if (!toggled_on) {
+        return;
+    }
+ 
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
@@ -265,7 +276,6 @@ void VitOttAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     if (total_samples == 0)
         return;
 
-    updParams();
     // transform buffer to L-R-L-R aligned simd buffer
 
     for (int sample_offset = 0; sample_offset < total_samples;) {
@@ -282,6 +292,8 @@ void VitOttAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
 
         sample_offset += num_samples;
     }
+
+    updateStatusOutputs();
 }
 void VitOttAudioProcessor::readAudio(vital::poly_float* comp_buf, juce::AudioSampleBuffer* buffer, int channels, int samples, int offset)
 {
