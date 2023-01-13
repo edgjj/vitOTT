@@ -162,6 +162,7 @@ class SynthSection : public Component, public Slider::Listener,
     virtual void resized() override;
     virtual void paint(Graphics& g) override;
     virtual void paintSidewaysHeadingText(Graphics& g);
+    virtual void paintHeadingText(Graphics& g);
     virtual void paintBackground(Graphics& g);
     virtual void setSkinValues(const Skin& skin, bool top_level);
     void setSkinOverride(Skin::SectionOverride skin_override) { skin_override_ = skin_override; }
@@ -256,6 +257,7 @@ class SynthSection : public Component, public Slider::Listener,
     float getSizeRatio() const { return size_ratio_; }
     int getPopupWidth() const { return kDefaultPopupMenuWidth * size_ratio_; }
     int getDualPopupWidth() const { return kDefaultDualPopupMenuWidth * size_ratio_; }
+    Skin::SectionOverride getSkinOverride() { return skin_override_; }
 
   protected:
     void setSidewaysHeading(bool sideways) { sideways_heading_ = sideways; }
@@ -278,7 +280,9 @@ class SynthSection : public Component, public Slider::Listener,
 
     void lockCriticalSection();
     void unlockCriticalSection();
+    int getTitleTextRight();
     Rectangle<int> getPowerButtonBounds();
+    Rectangle<int> getTitleBounds();
     float getDisplayScale() const;
     virtual int getPixelMultiple() const;
 

@@ -19,6 +19,7 @@
 #include "shaders.h"
 #include "synth_section.h"
 #include "open_gl_background.h"
+#include "popup_browser.h"
 
 #include <JuceHeader.h>
 
@@ -58,9 +59,14 @@ private:
     OpenGlWrapper _opengl;
 
     OpenGlBackground _background;
+    juce::Image _background_image;
 
     bool _opengl_unsupported{ false };
 
+    std::unique_ptr<PopupDisplay> _popup_display_1, _popup_display_2;
+    std::unique_ptr<SinglePopupSelector> _popup_selector;
+
+    std::vector<SynthSection*> _section_list;
     /*
     *   param stuff
     */

@@ -24,7 +24,7 @@ VitOttAudioProcessorEditor::VitOttAudioProcessorEditor(VitOttAudioProcessor& p)
     _ui = std::make_unique<SynthGuiInterface>(p, new CompressorSection("vitOTT"));
 
     addAndMakeVisible(*_ui);
-    setSize(600, 125);
+    setSize(565, 140);
 }
 
 VitOttAudioProcessorEditor::~VitOttAudioProcessorEditor()

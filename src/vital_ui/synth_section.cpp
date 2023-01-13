@@ -75,8 +75,20 @@ void SynthSection::paintSidewaysHeadingText(Graphics& g) {
   g.restoreState();
 }
 
+void SynthSection::paintHeadingText(Graphics& g) {
+  if (sideways_heading_) {
+    paintSidewaysHeadingText(g);
+    return;
+  }
+
+  g.setColour(findColour(Skin::kHeadingText, true));
+  g.setFont(Fonts::instance()->proportional_light().withPointHeight(size_ratio_ * 14.0f));
+  g.drawText(TRANS(getName()), getTitleBounds(), Justification::centred, false);
+}
+
 void SynthSection::paintBackground(Graphics& g) {
   paintContainer(g);
+  paintHeadingText(g);
 
   paintKnobShadows(g);
   paintChildrenBackgrounds(g);
@@ -631,9 +643,23 @@ float SynthSection::getWidgetRounding() {
   return findValue(Skin::kWidgetRoundedCorner);
 }
 
+int SynthSection::getTitleTextRight() {
+  return getWidth();
+}
+
 Rectangle<int> SynthSection::getPowerButtonBounds() {
   int title_width = getTitleWidth();
   return Rectangle<int>(getPowerButtonOffset(), 0, title_width, title_width);
+}
+
+Rectangle<int> SynthSection::getTitleBounds() {
+  int title_width = getTitleWidth();
+  int from = 0;
+  if (activator_)
+    from = getPowerButtonBounds().getRight() - title_width * kPowerButtonPaddingPercent;
+
+  int to = getTitleTextRight();
+  return Rectangle<int>(from, 0, to - from, title_width);
 }
 
 float SynthSection::getDisplayScale() const {

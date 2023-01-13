@@ -250,7 +250,7 @@ void CompressorEditor::mouseUp(const MouseEvent& e) {
   if (isRatio(hover_))
     setMouseCursor(MouseCursor::BottomEdgeResizeCursor);
 
-  // section_parent_->hidePopupDisplay(true);
+  section_parent_->hidePopupDisplay(true);
 }
 
 void CompressorEditor::mouseExit(const MouseEvent& e) {
