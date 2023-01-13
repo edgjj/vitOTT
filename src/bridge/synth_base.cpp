@@ -67,7 +67,7 @@ vital::control_map& SynthBase::getControls()
 
 void SynthBase::createControlMap()
 {
-    for (auto& v : _parent_vts.state) {
+    for (const auto& v : _parent_vts.state) { 
         _controls[v.getProperty("id").toString().toStdString()] = new vital::Value((double)v.getProperty("value"));
     }
 }
