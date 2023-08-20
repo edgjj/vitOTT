@@ -266,7 +266,7 @@ void VitOttAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::
     if (!toggled_on) {
         return;
     }
- 
+
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 

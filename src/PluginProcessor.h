@@ -16,9 +16,9 @@
 
 #pragma once
 
+#include "synth_base.h"
 #include "vital_dsp/compressor.h"
 #include "vital_dsp/framework/value.h"
-#include "synth_base.h"
 
 #include <JuceHeader.h>
 #include <array>
@@ -81,7 +81,7 @@ private:
     std::array<vital::Value*, 21> vals = {};
 
     double in_gain = 1.0f, out_gain = 1.0f;
-    bool toggled_on{ true };
+    bool toggled_on { true };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VitOttAudioProcessor)
 };

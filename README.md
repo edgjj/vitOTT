@@ -33,8 +33,8 @@ SSE2 compliant CPU.
 ```
     $ git clone --recursive https://github.com/edgjj/vitOTT.git
     $ mkdir build && cd build
-    $ cmake ..
-    $ cmake --build . --config Release
+    $ cmake -DCMAKE_BUILD_TYPE=Release ..
+    $ cmake --build .
 ```
 - You're great!
 
